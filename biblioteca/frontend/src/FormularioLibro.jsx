@@ -12,7 +12,7 @@ function FormularioLibro({ onAgregarLibro, libroEditar, esEdicion }) {
             setTitulo(libroEditar.titulo);
             setAutor(libroEditar.autor);
             setGenero(libroEditar.genero);
-            setCantidad(libroEditar.cantidad || "");
+            setCantidad(String(libroEditar.cantidad ?? ""));
         } else {
             // Limpiar formulario para nuevo libro
             setTitulo("");
@@ -25,10 +25,6 @@ function FormularioLibro({ onAgregarLibro, libroEditar, esEdicion }) {
     const handleAgregarClick = () => {
         if (titulo.trim() && autor.trim() && genero.trim() && cantidad.trim()) {
             onAgregarLibro({ titulo, autor, genero, cantidad });
-            setTitulo("");
-            setAutor("");
-            setGenero("");
-            setCantidad("");
         } else {
             alert("Por favor completa todos los campos");
         }

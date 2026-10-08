@@ -584,6 +584,149 @@ select:focus-visible {
   border-left: 4px solid var(--estado-entregado);
 }
 
+/* ===== FILTROS ===== */
+.filtros-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 10px;
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.filtro-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 180px;
+  min-width: 150px;
+}
+
+.filtro-campo label {
+  color: var(--slate-500);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.filtro-campo input,
+.filtro-campo select {
+  width: 100%;
+  padding: 9px 12px;
+  background: #fff;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--slate-900);
+  transition: var(--transition);
+}
+
+.filtro-campo select {
+  cursor: pointer;
+}
+
+.filtro-campo input:hover,
+.filtro-campo select:hover {
+  border-color: var(--slate-500);
+}
+
+.filtro-campo input:focus,
+.filtro-campo select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-ring);
+}
+
+.btn-limpiar-filtros {
+  padding: 9px 16px;
+  background: #fff;
+  color: var(--slate-700);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.btn-limpiar-filtros:hover:not(:disabled) {
+  background: var(--danger-soft);
+  border-color: #fecaca;
+  color: var(--danger);
+}
+
+.btn-limpiar-filtros:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== PAGINACION ===== */
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.paginacion-info {
+  color: var(--slate-500);
+  font-size: 0.85rem;
+}
+
+.paginacion-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.paginacion-controles button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  background: #fff;
+  color: var(--slate-700);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.paginacion-controles button:hover:not(:disabled):not(.activa) {
+  background: var(--primary-soft);
+  border-color: #bfdbfe;
+  color: var(--primary);
+}
+
+.paginacion-controles button.activa {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.paginacion-controles button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.paginacion-puntos {
+  padding: 0 6px;
+  color: var(--slate-500);
+}
+
 /* ===== MODAL ===== */
 .modal-overlay {
   position: fixed;
@@ -637,6 +780,16 @@ select:focus-visible {
 .btn-cerrar:hover {
   background: var(--slate-100);
   color: var(--slate-900);
+}
+
+/* Salida del modal: misma animación de entrada, en reversa */
+.modal-overlay.cerrando {
+  pointer-events: none;
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+.modal-overlay.cerrando .modal-contenido {
+  animation: popOut 0.3s var(--ease) forwards;
 }
 
 /* ===== FORMULARIOS ===== */
@@ -779,6 +932,16 @@ select:focus-visible {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes popOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(14px) scale(0.97); }
+}
+
 @keyframes sectionIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -841,6 +1004,20 @@ select:focus-visible {
 
   .btn-agregar {
     justify-content: center;
+  }
+
+  .filtro-campo {
+    flex: 1 1 100%;
+  }
+
+  .btn-limpiar-filtros {
+    width: 100%;
+  }
+
+  .paginacion {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .navegacion-tabs {

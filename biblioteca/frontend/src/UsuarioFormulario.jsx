@@ -51,10 +51,6 @@ function UsuarioFormulario({ onAgregarUsuario, usuarioEditar, esEdicion }) {
         }
 
         onAgregarUsuario({ identificacion, nombres, email, telefono });
-        setIdentificacion("");
-        setNombres("");
-        setEmail("");
-        setTelefono("");
     };
 
     const handleKeyPress = (e) => {

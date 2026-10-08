@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import FormularioLibro from "./FormularioLibro";
+import Modal from "./Modal";
+import Paginacion from "./Paginacion";
+import { usePaginacion } from "./usePaginacion";
+import { contiene } from "./utils";
 import { apiService } from "./services/apiService";
+
+const FILTROS_INICIALES = { titulo: "", autor: "", genero: "" };
 
 function Libro({ librosApp = [], setLibrosApp }) {
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -8,19 +14,37 @@ function Libro({ librosApp = [], setLibrosApp }) {
   const [libroEnEdicion, setLibroEnEdicion] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
+  const [filtros, setFiltros] = useState(FILTROS_INICIALES);
 
-  // Cargar libros al montar el componente
-  useEffect(() => {
-    cargarLibros();
-  }, []);
+  const librosFiltrados = libros.filter(
+    (l) =>
+      contiene(l.titulo, filtros.titulo) &&
+      contiene(l.autor, filtros.autor) &&
+      contiene(l.genero, filtros.genero)
+  );
+  const paginacion = usePaginacion(librosFiltrados);
+  const hayFiltros = Object.values(filtros).some((v) => v.trim() !== "");
+
+  const cambiarFiltro = (campo, valor) => {
+    setFiltros((prev) => ({ ...prev, [campo]: valor }));
+    paginacion.reiniciar();
+  };
+
+  const limpiarFiltros = () => {
+    setFiltros(FILTROS_INICIALES);
+    paginacion.reiniciar();
+  };
+
+  const actualizarLibros = (datos) => {
+    setLibros(datos);
+    if (setLibrosApp) setLibrosApp(datos);
+  };
 
   const cargarLibros = async () => {
     setCargando(true);
     setError(null);
     try {
-      const datos = await apiService.getLibros();
-      setLibros(datos);
-      if (setLibrosApp) setLibrosApp(datos);
+      actualizarLibros(await apiService.getLibros());
     } catch (err) {
       setError("Error al cargar libros: " + err.message);
       console.error(err);
@@ -29,27 +53,18 @@ function Libro({ librosApp = [], setLibrosApp }) {
     }
   };
 
-  const actualizarLibros = (nuevosLibros) => {
-    setLibros(nuevosLibros);
-    if (setLibrosApp) setLibrosApp(nuevosLibros);
-  };
+  useEffect(() => {
+    cargarLibros();
+  }, []);
 
   const agregarLibro = async (libro) => {
-    console.log("Agregando libro:", libro);
     try {
       if (libroEnEdicion !== null) {
-        // Actualizar libro existente
-        const libroId = libros[libroEnEdicion].id;
-        await apiService.updateLibro(libroId, libro);
-        const nuevosLibros = [...libros];
-        nuevosLibros[libroEnEdicion] = { ...libro, id: libroId };
-        actualizarLibros(nuevosLibros);
-        setLibroEnEdicion(null);
+        await apiService.updateLibro(libroEnEdicion.id, libro);
       } else {
-        // Crear nuevo libro
-        const libroCreado = await apiService.createLibro(libro);
-        actualizarLibros([...libros, libroCreado]);
+        await apiService.createLibro(libro);
       }
+      actualizarLibros(await apiService.getLibros());
       setModalAbierto(false);
       setError(null);
     } catch (error) {
@@ -63,18 +78,16 @@ function Libro({ librosApp = [], setLibrosApp }) {
     setModalAbierto(true);
   };
 
-  const abrirModalEditar = (index) => {
-    setLibroEnEdicion(index);
+  const abrirModalEditar = (libro) => {
+    setLibroEnEdicion(libro);
     setModalAbierto(true);
   };
 
-  const eliminarLibro = async (index) => {
+  const eliminarLibro = async (libro) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este libro?")) {
       try {
-        const libroId = libros[index].id;
-        await apiService.deleteLibro(libroId);
-        const nuevosLibros = libros.filter((_, i) => i !== index);
-        actualizarLibros(nuevosLibros);
+        await apiService.deleteLibro(libro.id);
+        actualizarLibros(await apiService.getLibros());
         setError(null);
       } catch (error) {
         setError("Error al eliminar libro: " + error.message);
@@ -90,17 +103,55 @@ function Libro({ librosApp = [], setLibrosApp }) {
   return (
     <div className="libro-container">
       {error && <div className="error-message">{error}</div>}
-      
+
       <div className="libro-header">
         <h2>Nuestros Libros</h2>
-        <button 
-          onClick={abrirModalNuevo} 
-          className="btn-agregar"
-        >
+        <button onClick={abrirModalNuevo} className="btn-agregar">
           + Agregar Libro
         </button>
       </div>
-      
+
+      <div className="filtros-barra">
+        <div className="filtro-campo">
+          <label htmlFor="filtro-libro-titulo">📖 Título</label>
+          <input
+            id="filtro-libro-titulo"
+            type="text"
+            placeholder="Buscar por título..."
+            value={filtros.titulo}
+            onChange={(e) => cambiarFiltro("titulo", e.target.value)}
+          />
+        </div>
+        <div className="filtro-campo">
+          <label htmlFor="filtro-libro-autor">✍️ Autor</label>
+          <input
+            id="filtro-libro-autor"
+            type="text"
+            placeholder="Buscar por autor..."
+            value={filtros.autor}
+            onChange={(e) => cambiarFiltro("autor", e.target.value)}
+          />
+        </div>
+        <div className="filtro-campo">
+          <label htmlFor="filtro-libro-genero">🏷️ Género</label>
+          <input
+            id="filtro-libro-genero"
+            type="text"
+            placeholder="Buscar por género..."
+            value={filtros.genero}
+            onChange={(e) => cambiarFiltro("genero", e.target.value)}
+          />
+        </div>
+        <button
+          type="button"
+          className="btn-limpiar-filtros"
+          onClick={limpiarFiltros}
+          disabled={!hayFiltros}
+        >
+          ✕ Limpiar
+        </button>
+      </div>
+
       <table className="tabla-libros">
         <thead>
           <tr>
@@ -112,23 +163,23 @@ function Libro({ librosApp = [], setLibrosApp }) {
           </tr>
         </thead>
         <tbody>
-          {libros.length > 0 ? (
-            libros.map((libro, index) => (
-              <tr key={libro.id || index}>
+          {paginacion.visibles.length > 0 ? (
+            paginacion.visibles.map((libro) => (
+              <tr key={libro.id}>
                 <td>{libro.titulo}</td>
                 <td>{libro.autor}</td>
                 <td>{libro.genero}</td>
                 <td>{libro.cantidad}</td>
                 <td className="acciones-celda">
-                  <button 
-                    onClick={() => abrirModalEditar(index)}
+                  <button
+                    onClick={() => abrirModalEditar(libro)}
                     className="btn-editar"
                     title="Editar libro"
                   >
                     ✏️ Editar
                   </button>
-                  <button 
-                    onClick={() => eliminarLibro(index)}
+                  <button
+                    onClick={() => eliminarLibro(libro)}
                     className="btn-eliminar"
                     title="Eliminar libro"
                   >
@@ -140,35 +191,34 @@ function Libro({ librosApp = [], setLibrosApp }) {
           ) : (
             <tr>
               <td colSpan="5" className="tabla-vacia">
-                📚 No hay libros registrados aún. ¡Agrega uno para comenzar!
+                {hayFiltros
+                  ? "🔍 No se encontraron libros con los filtros aplicados."
+                  : "📚 No hay libros registrados aún. ¡Agrega uno para comenzar!"}
               </td>
             </tr>
           )}
         </tbody>
       </table>
 
-      {modalAbierto && (
-        <div className="modal-overlay" onClick={() => setModalAbierto(false)}>
-          <div className="modal-contenido" onClick={(e) => e.stopPropagation()}>
-            <button 
-              onClick={() => setModalAbierto(false)} 
-              className="btn-cerrar"
-            >
-              ✕
-            </button>
-            
-            <FormularioLibro 
-              onAgregarLibro={agregarLibro}
-              libroEditar={libroEnEdicion !== null ? libros[libroEnEdicion] : null}
-              esEdicion={libroEnEdicion !== null}
-            />
-          </div>
-        </div>
-      )}
+      <Paginacion
+        paginaActual={paginacion.paginaActual}
+        totalPaginas={paginacion.totalPaginas}
+        total={paginacion.total}
+        desde={paginacion.desde}
+        hasta={paginacion.hasta}
+        onCambiar={paginacion.irAPagina}
+        etiqueta="libros"
+      />
+
+      <Modal abierto={modalAbierto} onCerrar={() => setModalAbierto(false)}>
+        <FormularioLibro
+          onAgregarLibro={agregarLibro}
+          libroEditar={libroEnEdicion}
+          esEdicion={libroEnEdicion !== null}
+        />
+      </Modal>
     </div>
   );
 }
 
 export default Libro;
-
-
