@@ -1,0 +1,909 @@
+/* =====================================================
+   BIBLIOTECA - Sistema de Gestión Bibliotecaria
+   Estilo: panel administrativo moderno (neutros + azul)
+   ===================================================== */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-soft: #eff6ff;
+  --primary-ring: rgba(37, 99, 235, 0.22);
+
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-500: #64748b;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-text: #991b1b;
+
+  --estado-activo: #d97706;
+  --estado-activo-bg: rgba(217, 119, 6, 0.1);
+  --estado-entregado: #16a34a;
+  --estado-entregado-bg: rgba(22, 163, 74, 0.1);
+
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 20px 45px rgba(15, 23, 42, 0.25);
+  --ease: cubic-bezier(0.22, 0.8, 0.3, 1);
+  --transition: all 0.2s var(--ease);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--slate-800);
+  background-color: var(--slate-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ===== APP GLOBAL ===== */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App > h1 {
+  background: var(--slate-900);
+  color: #fff;
+  padding: 16px 28px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow);
+}
+
+/* ===== LOGIN ===== */
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.3), transparent 45%),
+    linear-gradient(135deg, var(--slate-900) 0%, var(--slate-800) 100%);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 410px;
+  padding: 38px 34px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.5s var(--ease) both;
+}
+
+.login-box h3 {
+  color: var(--slate-900);
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.login-box h3 + p {
+  text-align: center;
+  color: var(--slate-500);
+  font-weight: 400;
+  margin: 0 0 12px;
+}
+
+.login-box p {
+  color: var(--slate-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 16px 0 6px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--slate-900);
+  transition: var(--transition);
+}
+
+.login-box input:hover {
+  border-color: var(--slate-500);
+}
+
+.login-box input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-ring);
+}
+
+.login-box button {
+  width: 100%;
+  margin-top: 26px;
+  padding: 11px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-box button:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.login-box button:active {
+  transform: translateY(0);
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.biblioteca-container {
+  flex: 1;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 26px 20px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.biblioteca-header {
+  margin-bottom: 18px;
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.biblioteca-header h3 {
+  color: var(--slate-900);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.biblioteca-header p {
+  color: var(--slate-500);
+  font-size: 0.95rem;
+}
+
+.biblioteca-header hr {
+  display: none;
+}
+
+/* ===== NAVEGACION ===== */
+.navegacion-tabs {
+  order: -1;
+  position: sticky;
+  top: 10px;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--slate-200);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.5s ease-out 0.05s both;
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: transparent;
+  color: var(--slate-500);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tab-button:hover {
+  background: var(--slate-100);
+  color: var(--slate-900);
+}
+
+.tab-button.activo {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.btn-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 9px 16px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cerrar-sesion:hover {
+  background: var(--danger-soft);
+  border-color: #fecaca;
+}
+
+/* ===== SECCIONES (tarjetas) ===== */
+.libro-container,
+.usuario-container,
+.prestamo-container,
+.entrega-container,
+.toma-inventario-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 26px;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  animation: sectionIn 0.4s var(--ease) backwards;
+}
+
+.libro-header,
+.usuario-header,
+.prestamo-header,
+.entrega-header,
+.toma-inventario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.libro-header h2,
+.usuario-header h2,
+.prestamo-header h2,
+.entrega-header h2,
+.toma-inventario-header h2 {
+  color: var(--slate-900);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* ===== BOTONES ===== */
+.btn-agregar,
+.btn-agregar-libro {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-agregar:hover,
+.btn-agregar-libro:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-agregar:active,
+.btn-agregar-libro:active {
+  transform: translateY(0);
+}
+
+.btn-agregar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  font-size: 0.9rem;
+}
+
+.btn-agregar-libro {
+  width: 100%;
+  margin-top: auto;
+  padding: 13px;
+  font-size: 1rem;
+}
+
+.acciones-celda {
+  white-space: nowrap;
+}
+
+.btn-editar,
+.btn-eliminar {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  margin-right: 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.btn-editar:last-child,
+.btn-eliminar:last-child {
+  margin-right: 0;
+}
+
+.btn-editar {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: #bfdbfe;
+}
+
+.btn-editar:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.btn-eliminar {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: #fecaca;
+}
+
+.btn-eliminar:hover {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.btn-editar:active,
+.btn-eliminar:active {
+  transform: scale(0.97);
+}
+
+/* ===== TABLAS ===== */
+.tabla-libros,
+.tabla-usuarios,
+.tabla-prestamos,
+.tabla-entregas,
+.tabla-toma-inventario {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: 10px;
+}
+
+.tabla-libros thead th,
+.tabla-usuarios thead th,
+.tabla-prestamos thead th,
+.tabla-entregas thead th,
+.tabla-toma-inventario thead th {
+  padding: 12px 16px;
+  background: var(--slate-50);
+  color: var(--slate-500);
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.tabla-libros tbody tr,
+.tabla-usuarios tbody tr,
+.tabla-prestamos tbody tr,
+.tabla-entregas tbody tr,
+.tabla-toma-inventario tbody tr {
+  animation: rowIn 0.35s var(--ease) both;
+  transition: background-color 0.15s ease;
+}
+
+.App tbody tr:nth-child(1) { animation-delay: 0.03s; }
+.App tbody tr:nth-child(2) { animation-delay: 0.06s; }
+.App tbody tr:nth-child(3) { animation-delay: 0.09s; }
+.App tbody tr:nth-child(4) { animation-delay: 0.12s; }
+.App tbody tr:nth-child(5) { animation-delay: 0.15s; }
+.App tbody tr:nth-child(6) { animation-delay: 0.18s; }
+.App tbody tr:nth-child(7) { animation-delay: 0.21s; }
+.App tbody tr:nth-child(8) { animation-delay: 0.24s; }
+.App tbody tr:nth-child(n+9) { animation-delay: 0.27s; }
+
+.tabla-libros tbody td,
+.tabla-usuarios tbody td,
+.tabla-prestamos tbody td,
+.tabla-entregas tbody td,
+.tabla-toma-inventario tbody td {
+  padding: 13px 16px;
+  font-size: 0.9rem;
+  color: var(--slate-700);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--slate-100);
+}
+
+.tabla-libros tbody tr:last-child td,
+.tabla-usuarios tbody tr:last-child td,
+.tabla-prestamos tbody tr:last-child td,
+.tabla-entregas tbody tr:last-child td,
+.tabla-toma-inventario tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-libros tbody tr:hover,
+.tabla-usuarios tbody tr:hover,
+.tabla-entregas tbody tr:hover,
+.tabla-toma-inventario tbody tr:hover {
+  background-color: var(--slate-50);
+}
+
+.tabla-vacia {
+  text-align: center;
+  color: var(--slate-500);
+  padding: 36px 16px !important;
+}
+
+.cantidad-fisica,
+.cantidad-sistema {
+  font-weight: 600;
+  text-align: center;
+}
+
+.cantidad-anterior {
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.cantidad-actual {
+  font-weight: 600;
+  color: var(--estado-entregado);
+}
+
+.diferencia-ok {
+  color: var(--estado-entregado);
+  font-weight: 700;
+}
+
+.diferencia-error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* ===== PRESTAMOS: estados y leyenda (mismos colores en filas y leyenda) ===== */
+.tabla-prestamos tbody tr.fila-activa {
+  background-color: var(--estado-activo-bg);
+}
+
+.tabla-prestamos tbody tr.fila-entregada {
+  background-color: var(--estado-entregado-bg);
+}
+
+.tabla-prestamos tbody tr.fila-activa td:first-child {
+  border-left: 4px solid var(--estado-activo);
+}
+
+.tabla-prestamos tbody tr.fila-entregada td:first-child {
+  border-left: 4px solid var(--estado-entregado);
+}
+
+.tabla-prestamos tbody tr.fila-activa:hover,
+.tabla-prestamos tbody tr.fila-entregada:hover {
+  filter: brightness(0.97);
+}
+
+.prestamo-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: 10px;
+  animation: fadeIn 0.5s ease-out 0.2s both;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leyenda-item span {
+  font-size: 0.85rem;
+  color: var(--slate-700);
+}
+
+.leyenda-color {
+  flex-shrink: 0;
+  width: 26px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.leyenda-color.activo {
+  background-color: var(--estado-activo-bg);
+  border-left: 4px solid var(--estado-activo);
+}
+
+.leyenda-color.entregado {
+  background-color: var(--estado-entregado-bg);
+  border-left: 4px solid var(--estado-entregado);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  overflow: auto;
+  animation: fadeIn 0.2s ease-out both;
+}
+
+.modal-contenido {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 680px;
+  height: 92vh;
+  height: 92dvh;
+  margin: auto;
+  padding: 32px 34px 30px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  animation: popIn 0.3s var(--ease) both;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--slate-500);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cerrar:hover {
+  background: var(--slate-100);
+  color: var(--slate-900);
+}
+
+/* ===== FORMULARIOS ===== */
+.formulario-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.formulario-container h2 {
+  color: var(--slate-900);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 36px 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.formulario-group {
+  margin-bottom: 22px;
+  animation: fieldIn 0.35s var(--ease) both;
+}
+
+.formulario-group:nth-of-type(1) { animation-delay: 0.05s; }
+.formulario-group:nth-of-type(2) { animation-delay: 0.09s; }
+.formulario-group:nth-of-type(3) { animation-delay: 0.13s; }
+.formulario-group:nth-of-type(4) { animation-delay: 0.17s; }
+.formulario-group:nth-of-type(5) { animation-delay: 0.21s; }
+.formulario-group:nth-of-type(n+6) { animation-delay: 0.25s; }
+
+.formulario-container p {
+  color: var(--slate-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.formulario-container input:not([type="checkbox"]),
+.formulario-select {
+  width: 100%;
+  padding: 11px 14px;
+  background: #fff;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius);
+  font-size: 0.97rem;
+  font-family: inherit;
+  color: var(--slate-900);
+  transition: var(--transition);
+}
+
+.formulario-select {
+  cursor: pointer;
+}
+
+.formulario-container input:not([type="checkbox"]):hover,
+.formulario-select:hover {
+  border-color: var(--slate-500);
+}
+
+.formulario-container input:not([type="checkbox"]):focus,
+.formulario-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-ring);
+}
+
+.formulario-container input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.formulario-container label {
+  color: var(--slate-700);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.input-readonly,
+.formulario-select:disabled {
+  background-color: var(--slate-100) !important;
+  color: var(--slate-500);
+  cursor: not-allowed;
+}
+
+.input-readonly:hover,
+.input-readonly:focus {
+  border-color: var(--slate-300) !important;
+  box-shadow: none !important;
+}
+
+.campo-ayuda {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.78rem;
+  color: var(--slate-500);
+}
+
+/* ===== MENSAJES ===== */
+.error-message,
+.success-message,
+.warning-message {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1px solid;
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slideIn 0.3s var(--ease) both;
+}
+
+.error-message {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger-text);
+}
+
+.success-message {
+  background: #f0fdf4;
+  border-color: var(--estado-entregado);
+  color: #166534;
+}
+
+.warning-message {
+  background: #fffbeb;
+  border-color: var(--estado-activo);
+  color: #92400e;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes sectionIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fieldIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 960px) {
+  .tabla-libros,
+  .tabla-usuarios,
+  .tabla-prestamos,
+  .tabla-entregas,
+  .tabla-toma-inventario {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 768px) {
+  .App > h1 {
+    padding: 14px 16px;
+    font-size: 1.1rem;
+  }
+
+  .biblioteca-container {
+    padding: 18px 12px 30px;
+  }
+
+  .libro-container,
+  .usuario-container,
+  .prestamo-container,
+  .entrega-container,
+  .toma-inventario-container {
+    padding: 18px 14px;
+  }
+
+  .libro-header,
+  .usuario-header,
+  .prestamo-header,
+  .entrega-header,
+  .toma-inventario-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-agregar {
+    justify-content: center;
+  }
+
+  .navegacion-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tab-button,
+  .btn-cerrar-sesion {
+    justify-content: center;
+    padding: 9px 8px;
+    font-size: 0.82rem;
+  }
+
+  .btn-cerrar-sesion {
+    grid-column: 1 / -1;
+    margin-left: 0;
+  }
+
+  .login-box {
+    padding: 28px 22px;
+  }
+
+  .modal-contenido {
+    padding: 24px 18px 20px;
+    height: 94vh;
+    height: 94dvh;
+  }
+}
+
+@media (max-width: 480px) {
+  .biblioteca-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .tabla-libros thead th,
+  .tabla-usuarios thead th,
+  .tabla-prestamos thead th,
+  .tabla-entregas thead th,
+  .tabla-toma-inventario thead th,
+  .tabla-libros tbody td,
+  .tabla-usuarios tbody td,
+  .tabla-prestamos tbody td,
+  .tabla-entregas tbody td,
+  .tabla-toma-inventario tbody td {
+    padding: 10px;
+    font-size: 0.82rem;
+  }
+
+  .formulario-container h2 {
+    font-size: 1.1rem;
+  }
+
+  .prestamo-leyenda {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
